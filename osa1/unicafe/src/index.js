@@ -11,7 +11,6 @@ const App = () => {
   const incrementNeutral = () => setNeutral(neutral + 1)
   const incrementBad = () => setBad(bad + 1)
 
-
   return (
     <div>
       <h1>give feedback</h1>
@@ -36,15 +35,15 @@ const App = () => {
 }
 
 const Button = (props) => (
-    <button onClick={props.handleClick}>{props.text}</button>
-  )
+  <button onClick={props.handleClick}>{props.text}</button>
+)
 
 const Statistics = (props) => {
-  let all = props.good+props.neutral+props.bad
-  let average = (props.good-props.bad)/all
-  let positive = props.good/all * 100 + ' %'
+  let all = props.good + props.neutral + props.bad
+  let average = (props.good - props.bad) / all
+  let positive = props.good / all * 100 + ' %'
 
-  if (all < 1){
+  if (all < 1) {
     return (
       <div>
         No feedback given.
@@ -53,14 +52,14 @@ const Statistics = (props) => {
   }
   return (
     <div>
-      <table> 
+      <table>
         <tbody>
-          <StatisticsLine text='good' value={props.good}/>
-          <StatisticsLine text='neutral' value={props.neutral}/>
-          <StatisticsLine text='bad' value={props.bad}/>
-          <StatisticsLine text='all' value={all}/>
-          <StatisticsLine text='average' value={average}/>
-          <StatisticsLine text='positive' value={positive}/>
+          <StatisticsLine text='good' value={props.good} />
+          <StatisticsLine text='neutral' value={props.neutral} />
+          <StatisticsLine text='bad' value={props.bad} />
+          <StatisticsLine text='all' value={all} />
+          <StatisticsLine text='average' value={average} />
+          <StatisticsLine text='positive' value={positive} />
         </tbody>
       </table>
     </div>
@@ -68,11 +67,11 @@ const Statistics = (props) => {
 }
 
 const StatisticsLine = (props) => {
-  return ( 
-      <tr>
-        <td>{props.text}</td>
-        <td>{props.value}</td>
-      </tr>
+  return (
+    <tr>
+      <td>{props.text}</td>
+      <td>{props.value}</td>
+    </tr>
   )
 }
 ReactDOM.render(<App />,
