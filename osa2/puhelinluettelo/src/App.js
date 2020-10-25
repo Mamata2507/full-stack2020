@@ -36,6 +36,7 @@ const PersonForm = (props) => {
 }
 
 const Filter = ({ filter, handleFilterChange }) => {
+
   return (
     <div>
       filter shown with
@@ -47,11 +48,37 @@ const Filter = ({ filter, handleFilterChange }) => {
   )
 }
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  const messageStyle = {
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
+  }
+
+  if (message[1]) {
+    messageStyle.color = 'red'
+  }
+  return (
+    <div style={messageStyle}>
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState(null)
 
   const personsToShow = filter.length === 0
     ? persons
@@ -78,28 +105,42 @@ const App = () => {
           .update(person.id, changedPerson)
           .then(response => {
             setPersons(persons.map(p => p.id !== person.id ? p : response.data))
+            setMessage([`Updated ${newName}`])
+
+          })
+          .catch(error => {
+            setPersons(persons.filter(p => p.id !== person.id))
+            setMessage([`Information of ${newName} has already been removed from server`, true])
           })
       }
-      setNewName('')
-      setNewNumber('')
+
     } else {
       personService
         .create(newPerson)
         .then(response => {
           setPersons(persons.concat(response.data))
-          setNewName('')
-          setNewNumber('')
+          setMessage([`Added ${newName}`])
+
         })
     }
+    setTimeout(() => {
+      setMessage(null)
+    }, 3000)
+    setNewName('')
+    setNewNumber('')
   }
 
   const handleClick = (name, id) => {
     if (window.confirm(`Delete ${name}?`)) {
       personService
         .remove(id)
-        .then(
-          setPersons(persons.filter(person => person.id !== id))
-        )
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id));
+          setMessage([`Removed ${name}`])
+        })
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)
     }
   }
 
@@ -116,6 +157,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter
         filter={filter} handleFilterChange={handleFilterChange}
       />
