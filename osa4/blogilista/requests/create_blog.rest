@@ -1,8 +1,12 @@
-POST  http://localhost:3003/api/users
+POST  http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer asd
 
 {
-    "username": "jane",
-    "name": "Jane Johnson",
-    "password": "passu123"
+    "title": "Fishing blog 2",
+    "author": "Jimothy Timothy",
+    "url": "www.myspace.com"
 }
+
+
+
