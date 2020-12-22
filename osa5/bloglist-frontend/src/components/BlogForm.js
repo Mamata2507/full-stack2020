@@ -6,14 +6,17 @@ const BlogForm = ({ createBlog }) => {
   const [url, setUrl] = useState('')
 
   const handleTitleChange = async (event) => {
+    event.preventDefault()
     setTitle(event.target.value)
   }
 
   const handleAuthorChange = async (event) => {
+    event.preventDefault()
     setAuthor(event.target.value)
   }
 
   const handleUrlChange = async (event) => {
+    event.preventDefault()
     setUrl(event.target.value)
   }
 
@@ -31,12 +34,12 @@ const BlogForm = ({ createBlog }) => {
   }
 
   return (
-    <div>
+    <div className="formDiv">
       <form onSubmit={addBlog}>
         <div>
           title:
           <input
-            type="text"
+            id='title'
             value={title}
             name="Title"
             onChange={handleTitleChange}
@@ -45,7 +48,7 @@ const BlogForm = ({ createBlog }) => {
         <div>
           author:
           <input
-            type="text"
+            id='author'
             value={author}
             name="Author"
             onChange={handleAuthorChange}
@@ -54,13 +57,13 @@ const BlogForm = ({ createBlog }) => {
         <div>
           url:
           <input
-            type="text"
+            id='url'
             value={url}
             name="Url"
             onChange={handleUrlChange}
           />
         </div>
-        <button type="submit">create</button>
+        <button id="create-blog" type="submit">create</button>
       </form>
     </div>
   )

@@ -136,9 +136,9 @@ const App = () => {
           <BlogForm createBlog={addBlog} />
         </Togglable>
       </div>
-      {blogs.map((blog, i) =>
+      {blogs.map((blog) =>
         <Blog
-          key={i}
+          key={blog.id}
           blog={blog}
           likeBlog={() => likeBlogOf(blog.id)}
           removeBlog={() => removeBlogOf(blog.id)}
