@@ -1,36 +1,24 @@
-const initialNotification = null
-
-const reducer = (state = initialNotification, action) => {
-  switch (action.type){
-    case 'VOTE_NOTIFICATION':
-      return `you voted ${action.data}`
+const reducer = (state = null, action) => {
+  switch (action.type) {
     case 'CREATE_NOTIFICATION':
-      return `you added ${action.data}`
-    case 'RESET_NOTIFICATION':
       return action.data
+    case 'RESET_NOTIFICATION':
+      return null
     default: return state
   }
 }
 
-export const voteNotification = (content) => {
-
-  return {
-    type: 'VOTE_NOTIFICATION',
-    data:  content
-  }
-}
-
-export const createNotification = (content) => {
-  return {
-    type: 'CREATE_NOTIFICATION',
-    data: content
-  }
-}
-
-export const resetNotification = () => {
-  return {
-    type: 'RESET_NOTIFICATION',
-    data: null
+export const createNotification = (content, time) => {
+  return async dispatch => {
+    dispatch({
+      type: 'CREATE_NOTIFICATION',
+      data: content
+    })
+    setTimeout(() => {
+      dispatch({
+        type: 'RESET_NOTIFICATION'
+      })
+    }, time*1000);
   }
 }
 
