@@ -8,17 +8,21 @@ const reducer = (state = null, action) => {
   }
 }
 
+let timeoutID
 export const createNotification = (content, time) => {
+
   return async dispatch => {
+    clearTimeout(timeoutID)
+
+    timeoutID = setTimeout(() => {
+      dispatch({ type: 'RESET_NOTIFICATION' })
+    }, time * 1000)
+    
     dispatch({
       type: 'CREATE_NOTIFICATION',
       data: content
     })
-    setTimeout(() => {
-      dispatch({
-        type: 'RESET_NOTIFICATION'
-      })
-    }, time*1000);
+
   }
 }
 
