@@ -39,7 +39,7 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      <UpdateAuthor authors={authors}/>
+      {props.token !== null && <UpdateAuthor authors={authors}/>}
     </div>
   )
 }

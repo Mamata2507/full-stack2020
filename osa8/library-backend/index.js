@@ -85,20 +85,22 @@ const resolvers = {
     allAuthors: () => Author.find({}),
 
     bookCount: () => Book.collection.countDocuments(),
-    allBooks: (root, args) => {
+    allBooks: async (root, args) => {
+      const author = await Author.find({ name: args.author })
       if (args.author && args.genre) {
-        return Book.find({})
+        const books = await Book.find({ author: { $in: author } })
+        return books.filter(b => b.genres.includes(args.genre))
       } else if (args.author) {
-        return Book.find({})
+        return Book.find({ author: { $in: author } })
       } else if (args.genre) {
         return Book.find({ genres: { $in: args.genre } })
       }
       return Book.find({})
     },
-    
+
     me: (root, args, context) => {
       return context.currentUser
-    }  
+    }
   },
   Author: {
     bookCount: async (root) => {
@@ -118,7 +120,7 @@ const resolvers = {
 
       if (!currentUser) {
         throw new AuthenticationError("not authenticated")
-      }  
+      }
 
       let author = await Author.findOne({ name: args.author })
 
@@ -150,13 +152,13 @@ const resolvers = {
 
       return book
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser
 
       if (!currentUser) {
         throw new AuthenticationError("not authenticated")
-      }  
-      
+      }
+
       const author = await Author.findOne({ name: args.name })
       author.born = args.setBornTo
 
@@ -171,11 +173,11 @@ const resolvers = {
       return author
     },
     createUser: (root, args) => {
-      const user = new User({ 
+      const user = new User({
         username: args.username,
-        favoriteGenre: args.favoriteGenre 
+        favoriteGenre: args.favoriteGenre
       })
-  
+
       return user.save()
         .catch(error => {
           throw new UserInputError(error.message, {
@@ -185,16 +187,16 @@ const resolvers = {
     },
     login: async (root, args) => {
       const user = await User.findOne({ username: args.username })
-  
-      if ( !user || args.password !== 'secret' ) {
+
+      if (!user || args.password !== 'secret') {
         throw new UserInputError("wrong credentials")
       }
-  
+
       const userForToken = {
         username: user.username,
         id: user._id,
       }
-  
+
       return { value: jwt.sign(userForToken, JWT_SECRET) }
     },
   }
