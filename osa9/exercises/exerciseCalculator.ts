@@ -8,11 +8,10 @@ interface Result {
   average: number
 }
 
-const calculator = (dailyHours: Array<number>): Result => {
+const calculateExercises = (dailyHours: Array<number>, target: number): Result => {
   const trainingDays = dailyHours.filter(d => d != 0).length;
   const averageHours = dailyHours.reduce((a, b) => a + b) / dailyHours.length;
-  const target = 2;
-
+  
   const newResult = {
     periodLength: dailyHours.length,
     trainingDays: trainingDays,
@@ -31,7 +30,7 @@ const calculator = (dailyHours: Array<number>): Result => {
     newResult.ratingDescription = 'not too bad but could be better';
   } else {
     newResult.rating = 1;
-    newResult.ratingDescription = 'could be better';
+    newResult.ratingDescription = 'bad';
   }
 
   return newResult;
@@ -53,9 +52,9 @@ const parseArguments = (args: Array<string>): Array<number> => {
 
 try {
   const inputArr = parseArguments(process.argv);
-  console.log(calculator(inputArr));
+  console.log(calculateExercises(inputArr, 2));
 } catch (e) {
   console.log('Error, something bad happened, message: ', 'Provided values were not numbers!');
 }
 
-
+export default calculateExercises;
